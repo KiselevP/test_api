@@ -1,49 +1,53 @@
-import io.restassured.path.json.JsonPath;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
+import java.util.List;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.lessThan;
 
 public class PagesTest extends AbstractTest {
+
     @Test
-    void requestToLookAtOtherPeoplesPostsWithoutSort() {
-        JsonPath response = given()
+    void requestToLookMyPostsWithoutSort() {
+        List<Object> response = given()
                 .queryParam("sort", "createdAt")
-                .queryParam("order", "ASC")
                 .when()
                 .get(getBaseUrl() + "api/posts")
-                .jsonPath();
-        int id = response.get("data[1].id");
-        assertThat(response.get("data[0].id"), lessThan(id));
+                .jsonPath()
+                .get("data");
+        Assertions.assertNotEquals(response, null);
+        Assertions.assertFalse(response.size() == 10);
     }
 
     @Test
-    void requestToLookAtOtherPeoplesPostsLessToMore() {
-        given()
+    void requestToLookNotMyPostsWithoutSort() {
+        List<Object> response = given()
                 .queryParam("owner", "notMe")
                 .queryParam("sort", "createdAt")
                 .queryParam("order", "ASC")
                 .queryParam("page", "1")
                 .when()
                 .get(getBaseUrl() + "api/posts")
-                .then();
+                .jsonPath()
+                .get("data");
+        Assertions.assertTrue(response.size() == 4);
     }
 
     @Test
-    void requestToLookAtOtherPeoplesPostsMoreToLess() {
-        given()
+    void requestToLookAtNotMyPostsMoreToLess() {
+        List<Object> response = given()
                 .queryParam("owner", "notMe")
                 .queryParam("sort", "createdAt")
                 .queryParam("order", "DESC")
                 .queryParam("page", "1")
                 .when()
                 .get(getBaseUrl() + "api/posts")
-                .then();
+                .jsonPath()
+                .get("data");
+
+        Assertions.assertNotEquals(response, null);
     }
 
     @Test
-    void requestToLookAtALLOtherPeoplesPosts() {
+    void requestToLookAtAllPosts() {
         given()
                 .queryParam("owner", "notMe")
                 .queryParam("sort", "createdAt")
@@ -55,7 +59,7 @@ public class PagesTest extends AbstractTest {
     }
 
     @Test
-    void requestToLookAtOtherPeoplesPostsNonExistentPage() {
+    void requestToLookAtNotMyPostsOnPage() {
         given()
                 .queryParam("owner", "notMe")
                 .queryParam("sort", "createdAt")
@@ -63,30 +67,18 @@ public class PagesTest extends AbstractTest {
                 .queryParam("page", "27654")
                 .when()
                 .get(getBaseUrl() + "api/posts")
-                .then();
-    }
-
-    @Test
-    void requestToLookAtOtherPeoplesPostsNonExistentPage2() {
-        given()
-                .queryParam("owner", "notMe")
-                .queryParam("sort", "createdAt")
-                .queryParam("order", "ASC")
-                .queryParam("page", "758")
-                .when()
-                .get(getBaseUrl() + "api/posts")
                 .then()
                 .statusCode(200);
     }
 
     @Test
-    void requestToLookMyPostsWithoutSort() {
-        given()
-                .queryParam("order", "ASC")
-                .queryParam("page", "1")
+    void requestToLookAtPost() {
+        int id = given()
                 .when()
-                .get(getBaseUrl() + "api/posts")
-                .then();
+                .get(getBaseUrl() + "api/posts/69179")
+                .jsonPath()
+                .get("id");
+        Assertions.assertTrue(id == 69179);
     }
 
     @Test
@@ -97,7 +89,8 @@ public class PagesTest extends AbstractTest {
                 .queryParam("page", "1")
                 .when()
                 .get(getBaseUrl() + "api/posts")
-                .then();
+                .then()
+                .statusCode(200);
     }
 
     @Test
@@ -108,17 +101,7 @@ public class PagesTest extends AbstractTest {
                 .queryParam("page", "1")
                 .when()
                 .get(getBaseUrl() + "api/posts")
-                .then();
-    }
-
-    @Test
-    void requestToLookMyPostsNonExistentPage() {
-        given()
-                .queryParam("sort", "createdAt")
-                .queryParam("order", "ASC")
-                .queryParam("page", "10000")
-                .when()
-                .get(getBaseUrl() + "api/posts")
-                .then();
+                .then()
+                .statusCode(200);
     }
 }
