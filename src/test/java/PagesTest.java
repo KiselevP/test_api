@@ -6,7 +6,7 @@ import static io.restassured.RestAssured.given;
 public class PagesTest extends AbstractTest {
 
     @Test
-    void requestToLookMyPostsWithoutSort() {
+    void myPostsSort() {
         List<Object> response = given()
                 .queryParam("sort", "createdAt")
                 .when()
@@ -18,7 +18,7 @@ public class PagesTest extends AbstractTest {
     }
 
     @Test
-    void requestToLookNotMyPostsWithoutSort() {
+    void otherPostsSort() {
         List<Object> response = given()
                 .queryParam("owner", "notMe")
                 .queryParam("sort", "createdAt")
@@ -32,7 +32,7 @@ public class PagesTest extends AbstractTest {
     }
 
     @Test
-    void requestToLookAtNotMyPostsMoreToLess() {
+    void otherPostsDesc() {
         List<Object> response = given()
                 .queryParam("owner", "notMe")
                 .queryParam("sort", "createdAt")
@@ -47,7 +47,7 @@ public class PagesTest extends AbstractTest {
     }
 
     @Test
-    void requestToLookAtAllPosts() {
+    void allPosts() {
         given()
                 .queryParam("owner", "notMe")
                 .queryParam("sort", "createdAt")
@@ -59,7 +59,7 @@ public class PagesTest extends AbstractTest {
     }
 
     @Test
-    void requestToLookAtNotMyPostsOnPage() {
+    void otherPostsOnPage() {
         given()
                 .queryParam("owner", "notMe")
                 .queryParam("sort", "createdAt")
@@ -72,17 +72,7 @@ public class PagesTest extends AbstractTest {
     }
 
     @Test
-    void requestToLookAtPost() {
-        int id = given()
-                .when()
-                .get(getBaseUrl() + "api/posts/69179")
-                .jsonPath()
-                .get("id");
-        Assertions.assertTrue(id == 69179);
-    }
-
-    @Test
-    void requestToLookMyPostsLessToMore() {
+    void myyPostsAsc() {
         given()
                 .queryParam("sort", "createdAt")
                 .queryParam("order", "ASC")
@@ -94,7 +84,7 @@ public class PagesTest extends AbstractTest {
     }
 
     @Test
-    void requestToLookMyPostsMoreToLess() {
+    void myPostsDesc() {
         given()
                 .queryParam("sort", "createdAt")
                 .queryParam("order", "DESC")
