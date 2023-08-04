@@ -5,7 +5,8 @@ import static io.restassured.RestAssured.given;
 public class NoAuthRequest
 {
     @Test
-    void failRequestNoAuthorizedUser() {
+    void requestNoAuthorizedUser()
+    {
         given()
                 .queryParam("owner", "notMe")
                 .queryParam("sort", "createdAt")
@@ -16,5 +17,4 @@ public class NoAuthRequest
                 .then()
                 .statusCode(401);
     }
-
 }

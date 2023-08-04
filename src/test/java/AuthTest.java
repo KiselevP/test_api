@@ -6,7 +6,7 @@ import static io.restassured.RestAssured.given;
 public class AuthTest
 {
     @Test
-    void getXAuthToken() {
+    void getAuthToken() {
         String response = given()
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("username", "login001")
@@ -22,7 +22,7 @@ public class AuthTest
     }
 
     @Test
-    void noGetXAuthTokenInvalidLogin() {
+    void invalidLogin() {
         given()
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("username", "login001" + "1")
@@ -34,7 +34,7 @@ public class AuthTest
     }
 
     @Test
-    void noGetXAuthTokenInvalidPassword() {
+    void invalidPassword() {
         given()
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("username", "login001")

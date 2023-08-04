@@ -3,8 +3,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import static io.restassured.RestAssured.given;
 
-public class PagesTest extends AbstractTest {
-
+public class PagesTest extends AbstractTest
+{
     @Test
     void myPostsSort() {
         List<Object> response = given()
