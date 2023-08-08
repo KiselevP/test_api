@@ -55,7 +55,7 @@ public class PagesTest extends AbstractTest
                 .when()
                 .get(getBaseUrl() + "api/posts")
                 .then()
-                .statusCode(500);
+                .statusCode(200);
     }
 
     @Test
